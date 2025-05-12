@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { use, useState } from "react";
+import Results from "./results";
 
 function Quiz() {
     const questionsList = [
@@ -17,19 +18,49 @@ function Quiz() {
             "options": ["Tom Cruise", "Tom Hanks", "Brad Pitt", "Leonardo DiCaprio"],
             "answer": "Tom Hanks"
         },
-    
+
     ]
+
+    const initialAnswers = Array(questionsList.length).fill(null);
+
+    const [userAnswers, setUserAnswers] = useState(initialAnswers);
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
 
+    const [isQuizFinished, setFinished] = useState(false);
+
     function goNext() {
-        // if (currentQuestion < questionsList.length - 1) {
-        setCurrentQuestion((currentQuestion+1) % questionsList.length );
+        if (currentQuestion < questionsList.length - 1) {
+            setCurrentQuestion(currentQuestion + 1);
+        } else {
+            setFinished(true);
+        }
     }
 
     function goPrev() {
-        setCurrentQuestion((currentQuestion-1 + questionsList.length) % questionsList.length );
+        setCurrentQuestion((currentQuestion - 1 + questionsList.length) % questionsList.length);
     }
+
+    function setUserAnswer(option) {
+        var tmpUserAnswers = [...userAnswers];
+        tmpUserAnswers[currentQuestion] = option;
+
+        setUserAnswers(tmpUserAnswers);
+    }
+
+    function restartQuiz() {
+        setUserAnswers(initialAnswers);
+        setCurrentQuestion(0);
+        setFinished(false);
+    }
+
+    if (isQuizFinished) {
+        return <Results userAnswers={userAnswers}
+                        questionsList={questionsList}
+                        restartQuiz={restartQuiz}/>
+    }
+
+    console.log(userAnswers);
 
 
     return (
@@ -38,19 +69,22 @@ function Quiz() {
             <p className="lead"> {questionsList[currentQuestion].question} </p>
             <div className="d-flex flex-column gap-2">
                 {questionsList[currentQuestion].options.map((option) => (
-                    <button className="btn btn-outline-primary"> {option} </button>
+                    <button
+                    className={"btn btn-outline-primary" + (userAnswers[currentQuestion] === option ? " active" : "" )}
+                    onClick={() => setUserAnswer(option)}> {option} </button>
                 ))}
             </div>
 
             <div className="d-flex justify-content-between m-2">
                 <button className="btn btn-primary w-25"
-                onClick={goPrev}
-                disabled={currentQuestion === 0}
+                    onClick={goPrev}
+                    disabled={currentQuestion === 0}
                 > Prev </button>
                 <button
-                className="btn btn-primary w-25"
-                onClick={goNext}>
-                    Next </button>
+                    className="btn btn-primary w-25"
+                    onClick={goNext}
+                    disabled={!userAnswers[currentQuestion]}>
+                    {currentQuestion === questionsList.length -1 ? "Finish" : "Next"} </button>
             </div>
 
         </div>
