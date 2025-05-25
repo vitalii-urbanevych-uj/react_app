@@ -3,10 +3,10 @@ export default function Navbar() {
         <nav className="navbar navbar-expand-lg bg-primary">
             <ul className="navbar-nav mr-auto">
                 <li className="nav-item">
-                    <a className="nav-link" href="/"> Home </a>
+                    <a className="nav-link" href="./"> Home </a>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="/quiz"> Quiz </a>
+                    <a className="nav-link" href="./quiz"> Quiz </a>
                 </li>
             </ul>
         </nav>
