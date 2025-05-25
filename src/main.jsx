@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename="/react_app">
+  <BrowserRouter basename={import.meta.env.BASE_URL}>
     <App />
   </BrowserRouter>
 )
